@@ -47,6 +47,10 @@ class AuthService {
             }
         } catch (error) {
             console.log(error);
+            return {
+                statusCode: 500,
+                msg: 'Internal server error'
+            }
         }
     }
 
@@ -95,6 +99,10 @@ class AuthService {
             }
         } catch (error) {
             console.log(error);
+            return {
+                statusCode: 500,
+                msg: 'Internal server error'
+            }
         }
     }
 }
