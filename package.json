@@ -1,0 +1,43 @@
+{
+  "name": "lvtn_backend_nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lvtdien2001/LVTN_backend_nodejs.git"
+  },
+  "keywords": [
+    "lvtn",
+    "nodejs",
+    "mongodb",
+    "sale",
+    "watch"
+  ],
+  "author": "Le Van Thanh Dien",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lvtdien2001/LVTN_backend_nodejs/issues"
+  },
+  "homepage": "https://github.com/lvtdien2001/LVTN_backend_nodejs#readme",
+  "dependencies": {
+    "argon2": "^0.30.3",
+    "cloudinary": "^1.40.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.1",
+    "mongoose": "^7.4.1",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.9",
+    "@babel/node": "^7.22.6",
+    "@babel/preset-env": "^7.22.9",
+    "nodemon": "^3.0.1"
+  }
+}
