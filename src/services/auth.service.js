@@ -49,6 +49,7 @@ class AuthService {
             console.log(error);
             return {
                 statusCode: 500,
+                success: false,
                 msg: 'Internal server error'
             }
         }
@@ -101,6 +102,7 @@ class AuthService {
             console.log(error);
             return {
                 statusCode: 500,
+                success: false,
                 msg: 'Internal server error'
             }
         }
