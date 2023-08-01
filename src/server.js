@@ -1,8 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import initRouter from './routes';
 import connectDB from './config/connectDB';
-import cors from 'cors';
+import verifyToken from './middleware/verifyToken';
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(verifyToken);
 initRouter(app);
 connectDB();
 
