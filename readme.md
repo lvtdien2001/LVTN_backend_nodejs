@@ -9,7 +9,7 @@
 - PUT /user/disable/:id: khóa hoặc mở tài khoản dựa trên id
 ## Address API
 - GET /address: trả về tất cả địa chỉ của user đang đăng nhập
-- GET /address/:id: trả về một địa chỉ dựa trên id
+- GET /address/\:id: trả về một địa chỉ dựa trên id
 - POST /address: thêm một địa chỉ mới
 - PUT /address/:id: sửa thông tin địa chỉ dựa trên id
 - PUT /address/change-default/:id: thay đổi địa chỉ mặc định dựa trên id
