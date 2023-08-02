@@ -14,4 +14,9 @@
 - PUT /address/:id : sửa thông tin địa chỉ dựa trên id
 - PUT /address/change-default/:id : thay đổi địa chỉ mặc định dựa trên id
 - DELETE /address/:id : xóa địa chỉ dựa trên id
-## 
+## Brand API
+- GET /brand: trả về tất cả thương hiệu trong database
+- GET /brand/:id : trả về một thương hiệu dựa trên id
+- POST /brand: thêm một thương hiệu mới
+- PUT /brand/:id : sửa thông tin thương hiệu dựa trên id
+- DELETE /brand/:id : xóa thương hiệu dựa trên id
