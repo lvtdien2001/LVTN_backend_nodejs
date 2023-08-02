@@ -128,7 +128,7 @@ class UserService {
             return {
                 statusCode: 200,
                 success: true,
-                msg: 'Khóa tài khoản thành công',
+                msg: disabledUser.isDisabled ? 'Khóa tài khoản thành công' : 'Mở khóa tài khoản thành công',
                 disabledUser
             }
         } catch (error) {
