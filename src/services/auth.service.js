@@ -86,6 +86,15 @@ class AuthService {
                 }
             }
 
+            // disabled account
+            if (user.isDisabled) {
+                return {
+                    statusCode: 400,
+                    success: false,
+                    msg: 'Tài khoản của bạn đã bị khóa'
+                }
+            }
+
             const secretToken = process.env.ACCESS_SECRET_TOKEN;
             const accessToken = jwt.sign({
                 userId: user._id,
@@ -107,6 +116,47 @@ class AuthService {
             }
         }
     }
+
+    async changePassword(userId, oldPassword, newPassword) {
+        try {
+            const user = await userModel.findById(userId);
+            // user not exist
+            if (!user) {
+                return {
+                    statusCode: 404,
+                    success: false,
+                    msg: 'User not found'
+                }
+            }
+
+            const passwordValid = await argon2.verify(user.password, oldPassword);
+            // invalid password
+            if (!passwordValid) {
+                return {
+                    statusCode: 400,
+                    success: false,
+                    msg: 'Mật khẩu không chính xác!'
+                }
+            }
+
+            // all nice
+            const hashedPassword = await argon2.hash(newPassword);
+            await userModel.updateOne({ _id: userId }, { password: hashedPassword }, { new: true });
+            return {
+                statusCode: 200,
+                success: true,
+                msg: 'Đổi mật khẩu thành công'
+            }
+        } catch (error) {
+            console.log(error);
+            return {
+                statusCode: 500,
+                success: false,
+                msg: 'Internal server error'
+            }
+        }
+    }
+
 }
 
 export default AuthService
