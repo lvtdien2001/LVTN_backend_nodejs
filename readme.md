@@ -27,26 +27,26 @@
 * PUT /product/:id : sửa thông tin sản phẩm dựa trên id
 * DELETE /product/:id : xóa sản phẩm dựa trên id
 * Mã dữ liệu:
+Dòng sản phẩm
 
-| Rank | THING-TO-RANK |
-|-----:|---------------|
-|     1|               |
-|     2|               |
-|     3|               |
-
-- Dòng sản phẩm
 | Code |     01    |    02    |     03     |    04    |    05    |
 |-----:|-----------|----------|------------|----------|----------|
 | Name | Thời trang| Hiện đại | Sang trọng | Thể thao | Quân đội |
-- Dây đeo
+
+Dây đeo
+
 Code | 01 | 02 | 03 | 04 |
 --- | --- | --- | --- |--- |
 Name | Dây da | Dây kim loại | Dây nhựa | Dây vải |
-- Mặt kính
+
+Mặt kính
+
 Code | 01 | 02 | 03 |
 --- | --- | --- | --- |
 Name | Kính khoáng Mineral (Kính cứng) | Sapphire (Kính Chống Trầy) | Resin Glass (Kính Nhựa) |
-- Bộ máy
+
+Bộ máy
+
 Code | 01 | 02 |
 --- | --- | --- |
 Name | Cơ tự động (Automatic) | Quartz (Pin) |
