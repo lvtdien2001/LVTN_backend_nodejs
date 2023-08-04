@@ -93,6 +93,7 @@ class BrandService {
                 { new: true }
             );
             if (!updateBrand) {
+                await cloudinary.uploader.destroy(updateData.logo.cloudId);
                 return {
                     statusCode: 404,
                     success: false,
