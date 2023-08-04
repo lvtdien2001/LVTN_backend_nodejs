@@ -27,6 +27,11 @@
 * PUT /product/:id : sửa thông tin sản phẩm dựa trên id
 * DELETE /product/:id : xóa sản phẩm dựa trên id
 * Mã dữ liệu:
+| Rank | Languages |
+|-----:|-----------|
+|     1| Javascript|
+|     2| Python    |
+|     3| SQL       |
 - Dòng sản phẩm
 | Code |     01    |    02    |     03     |    04    |    05    |
 |-----:|-----------|----------|------------|----------|----------|
