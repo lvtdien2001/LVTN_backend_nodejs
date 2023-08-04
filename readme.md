@@ -1,6 +1,7 @@
 # API
 ## User API
 - POST /auth/register: đăng ký tài khoản
+* 1
 - POST /auth/login: đăng nhập
 - GET /user: trả về tất cả users trong database
 - GET /user/:id : trả về user dựa trên id
@@ -20,3 +21,9 @@
 - POST /brand: thêm một thương hiệu mới
 - PUT /brand/:id : sửa thông tin thương hiệu dựa trên id
 - DELETE /brand/:id : xóa thương hiệu dựa trên id
+## Product API
+- GET /product: trả về tất cả sản phẩm trong database
+- GET /product/:id : trả về một sản phẩm dựa trên id
+- POST /product: thêm một sản phẩm mới
+- PUT /product/:id : sửa thông tin sản phẩm dựa trên id
+- DELETE /product/:id : xóa sản phẩm dựa trên id
