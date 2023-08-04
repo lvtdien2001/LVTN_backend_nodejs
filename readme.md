@@ -28,9 +28,9 @@
 * DELETE /product/:id : xóa sản phẩm dựa trên id
 * Mã dữ liệu:
 - Dòng sản phẩm
-Code | 01 | 02 | 03 | 04 | 05 |
---- | --- | --- | --- |--- |--- |
-Name | Thời trang | Hiện đại | Sang trọng | Thể thao | Quân đội |
+| Code |     01    |    02    |     03     |    04    |    05    |
+|-----:|-----------|----------|------------|----------|----------|
+| Name | Thời trang| Hiện đại | Sang trọng | Thể thao | Quân đội |
 - Dây đeo
 Code | 01 | 02 | 03 | 04 |
 --- | --- | --- | --- |--- |
