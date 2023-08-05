@@ -50,3 +50,10 @@ Bộ máy
 Code | 01 | 02 |
 --- | --- | --- |
 Name | Cơ tự động (Automatic) | Quartz (Pin) |
+
+## Cart API
+* GET /cart: trả về tất cả sản phẩm trong giỏ hàng của user đang đăng nhập
+* GET /cart/:id : trả về một sản phẩm trong giỏ hàng dựa trên id
+* POST /cart: thêm một sản phẩm vào giỏ hàng
+* PUT /cart/:id : cập nhật số lượng sản phẩm trong giỏ hàng dựa trên id
+* DELETE /cart/:id : xóa sản phẩm khỏi giỏ hàng dựa trên id
