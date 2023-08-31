@@ -57,3 +57,17 @@ Name | Cơ tự động (Automatic) | Quartz (Pin) |
 * POST /cart: thêm một sản phẩm vào giỏ hàng
 * PUT /cart/:id : cập nhật số lượng sản phẩm trong giỏ hàng dựa trên id
 * DELETE /cart/:id : xóa sản phẩm khỏi giỏ hàng dựa trên id
+
+## Supplier API
+* GET /supplier: trả về tất cả nhà cung cấp trong database
+* GET /supplier/:id : trả về một nhà cung cấp dựa trên id
+* POST /supplier: thêm một nhà cung cấp mới
+* PUT /supplier/:id : cập nhật thông tin nhà cung cấp dựa trên id
+* DELETE /supplier/:id : xóa một nhà cung cấp dựa trên id
+
+## Goods received note API
+* GET /goods-received-note: trả về tất cả phiếu nhập kho trong database
+* GET /goods-received-note/:id : trả về một phiếu nhập kho dựa trên id
+* POST /goods-received-note: thêm một phiếu nhập kho mới
+* PUT /goods-received-note/:id : cập nhật thông tin phiếu nhập kho dựa trên id
+* DELETE /goods-received-note/:id : xóa một phiếu nhập kho dựa trên id
