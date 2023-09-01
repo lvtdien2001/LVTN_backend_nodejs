@@ -55,7 +55,7 @@ class GoodsReceivedNoteService {
 
     async create(payload) {
         try {
-            const totalAmount = payload.products.reduce(product => product.price * product.quantity, 0);
+            const totalAmount = payload.products.reduce((prevTotalAmount, product) => prevTotalAmount + Number(product.amount), 0);
             const newGoodsReceivedNote = new goodsReceivedNoteModel({
                 createdBy: payload.userId,
                 products: payload.products,
@@ -78,68 +78,68 @@ class GoodsReceivedNoteService {
         }
     }
 
-    async update(payload) {
-        try {
-            const totalAmount = payload.products.reduce(product => product.price * product.quantity, 0);
-            const updateData = {
-                updatedBy: payload.userId,
-                products: payload.products,
-                totalAmount
-            }
+    // async update(payload) {
+    //     try {
+    //         const totalAmount = payload.products.reduce((prevTotalAmount, product) => prevTotalAmount + Number(product.amount), 0);
+    //         const updateData = {
+    //             updatedBy: payload.userId,
+    //             products: payload.products,
+    //             totalAmount
+    //         }
 
-            const updatedGoodsReceivedNote = await goodsReceivedNoteModel
-                .findByIdAndUpdate(payload.id, updateData, { new: true })
-            if (!updatedGoodsReceivedNote) {
-                return {
-                    statusCode: 404,
-                    success: false,
-                    msg: 'Goods received note not found'
-                }
-            }
+    //         const updatedGoodsReceivedNote = await goodsReceivedNoteModel
+    //             .findByIdAndUpdate(payload.id, updateData, { new: true })
+    //         if (!updatedGoodsReceivedNote) {
+    //             return {
+    //                 statusCode: 404,
+    //                 success: false,
+    //                 msg: 'Goods received note not found'
+    //             }
+    //         }
 
-            return {
-                statusCode: 200,
-                success: true,
-                updatedGoodsReceivedNote,
-                msg: 'Cập nhật thông tin phiếu nhập kho thành công'
-            }
-        } catch (error) {
-            console.log(error);
-            return {
-                statusCode: 500,
-                success: false,
-                msg: 'Internal server error'
-            }
-        }
-    }
+    //         return {
+    //             statusCode: 200,
+    //             success: true,
+    //             updatedGoodsReceivedNote,
+    //             msg: 'Cập nhật thông tin phiếu nhập kho thành công'
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //         return {
+    //             statusCode: 500,
+    //             success: false,
+    //             msg: 'Internal server error'
+    //         }
+    //     }
+    // }
 
-    async delete(id) {
-        try {
-            const deletedGoodsReceivedNote = await goodsReceivedNoteModel
-                .findByIdAndDelete(id)
-            if (!deletedGoodsReceivedNote) {
-                return {
-                    statusCode: 404,
-                    success: false,
-                    msg: 'Goods received note not found'
-                }
-            }
+    // async delete(id) {
+    //     try {
+    //         const deletedGoodsReceivedNote = await goodsReceivedNoteModel
+    //             .findByIdAndDelete(id)
+    //         if (!deletedGoodsReceivedNote) {
+    //             return {
+    //                 statusCode: 404,
+    //                 success: false,
+    //                 msg: 'Goods received note not found'
+    //             }
+    //         }
 
-            return {
-                statusCode: 200,
-                success: true,
-                deletedGoodsReceivedNote,
-                msg: 'Xóa phiếu nhập kho thành công'
-            }
-        } catch (error) {
-            console.log(error);
-            return {
-                statusCode: 500,
-                success: false,
-                msg: 'Internal server error'
-            }
-        }
-    }
+    //         return {
+    //             statusCode: 200,
+    //             success: true,
+    //             deletedGoodsReceivedNote,
+    //             msg: 'Xóa phiếu nhập kho thành công'
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //         return {
+    //             statusCode: 500,
+    //             success: false,
+    //             msg: 'Internal server error'
+    //         }
+    //     }
+    // }
 }
 
 export default GoodsReceivedNoteService

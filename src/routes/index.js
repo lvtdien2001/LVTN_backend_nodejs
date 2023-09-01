@@ -9,14 +9,14 @@ import supplierRouter from './supplier.route';
 import goodsReceivedNoteRouter from './goodsReceivedNote.route';
 
 const initRouter = (app) => {
-    app.use('/auth', authRouter);
-    app.use('/address', addressRouter);
-    app.use('/user', userRouter);
-    app.use('/brand', brandRouter);
-    app.use('/product', productRouter);
-    app.use('/cart', cartRouter);
-    app.use('/supplier', verifyAdmin, supplierRouter);
-    app.use('/goods-received-note', verifyAdmin, goodsReceivedNoteRouter);
+    app.use('/api/auth', authRouter);
+    app.use('/api/address', addressRouter);
+    app.use('/api/user', userRouter);
+    app.use('/api/brand', brandRouter);
+    app.use('/api/product', productRouter);
+    app.use('/api/cart', cartRouter);
+    app.use('/api/supplier', verifyAdmin, supplierRouter);
+    app.use('/api/goods-received-note', verifyAdmin, goodsReceivedNoteRouter);
 }
 
 export default initRouter

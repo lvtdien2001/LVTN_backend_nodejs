@@ -180,6 +180,23 @@ class ProductService {
         }
     }
 
+    async increaseInventory(productId, userId, quantity) {
+        try {
+            const updateData = {
+                updatedby: userId,
+                $inc: { 'inventory': quantity }
+            }
+            await productModel.findByIdAndUpdate(productId, updateData);
+        } catch (error) {
+            console.log(error);
+            return {
+                statusCode: 500,
+                success: false,
+                msg: 'Internal server error'
+            }
+        }
+    }
+
     async delete(productId) {
         try {
             const deleteProduct = await productModel
