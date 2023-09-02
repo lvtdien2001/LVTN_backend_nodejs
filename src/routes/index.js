@@ -7,6 +7,8 @@ import productRouter from './product.route';
 import cartRouter from './cart.route';
 import supplierRouter from './supplier.route';
 import goodsReceivedNoteRouter from './goodsReceivedNote.route';
+import orderRouter from './order.route';
+import paymentRouter from './payment.route';
 
 const initRouter = (app) => {
     app.use('/api/auth', authRouter);
@@ -17,6 +19,8 @@ const initRouter = (app) => {
     app.use('/api/cart', cartRouter);
     app.use('/api/supplier', verifyAdmin, supplierRouter);
     app.use('/api/goods-received-note', verifyAdmin, goodsReceivedNoteRouter);
+    app.use('/api/order', orderRouter);
+    app.use('/api/payment', paymentRouter);
 }
 
 export default initRouter
