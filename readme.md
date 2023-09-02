@@ -1,13 +1,13 @@
-- [API]
-  - [User APIs](#user-apis)
-  - [Address APIs](#address-apis)
-  - [Brand APIs](#brand-apis)
-  - [Product APIs](#product-apis)
-  - [Cart APIs](#cart-apis)
-  - [Supplier APIs](#supplier-apis)
-  - [Goods received note APIs](#goods-received-note-apis)
-  - [Order APIs](#order-apis)
-  - [Payment APIs](#payment-apis)
+
+- [User APIs](#user-apis)
+- [Address APIs](#address-apis)
+- [Brand APIs](#brand-apis)
+- [Product APIs](#product-apis)
+- [Cart APIs](#cart-apis)
+- [Supplier APIs](#supplier-apis)
+- [Goods received note APIs](#goods-received-note-apis)
+- [Order APIs](#order-apis)
+- [Payment APIs](#payment-apis)
 
 ## User APIs
 * POST /api/auth/register: đăng ký tài khoản
