@@ -94,3 +94,10 @@ Bộ máy
 ## Payment APIs
 * GET /api/payment/vnp_ipn: kiểm tra thông tin thanh toán không bị thay đổi, được sử dụng để trao đổi giữa server với VNPAY sau khi website được deloy
 * POSt /api/payment/create-vnp-url: tạo url thanh toán VNPAY
+
+## Comment APIs
+* GET /api/comment/by-product: trả về tất cả đánh giá của một sản phẩm
+* GET /api/comment/:id : trả về một đánh giá dựa trên id
+* POST /api/comment: thêm mới một đánh giá sản phẩm
+* PUT /api/comment/:id : cập nhật đánh giá dựa trên id
+* DELETE /api/comment/:id : xóa một đánh giá dựa trên id

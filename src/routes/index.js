@@ -9,6 +9,7 @@ import supplierRouter from './supplier.route';
 import goodsReceivedNoteRouter from './goodsReceivedNote.route';
 import orderRouter from './order.route';
 import paymentRouter from './payment.route';
+import commentRouter from './comment.route';
 
 const initRouter = (app) => {
     app.use('/api/auth', authRouter);
@@ -21,6 +22,7 @@ const initRouter = (app) => {
     app.use('/api/goods-received-note', verifyAdmin, goodsReceivedNoteRouter);
     app.use('/api/order', orderRouter);
     app.use('/api/payment', paymentRouter);
+    app.use('/api/comment', commentRouter);
 }
 
 export default initRouter
