@@ -71,3 +71,16 @@ Name | Cơ tự động (Automatic) | Quartz (Pin) |
 * POST /api/goods-received-note: thêm một phiếu nhập kho mới
 * PUT /api/goods-received-note/:id : cập nhật thông tin phiếu nhập kho dựa trên id
 * DELETE /api/goods-received-note/:id : xóa một phiếu nhập kho dựa trên id
+
+## Order API
+* GET /api/order: trả về tất cả đơn hàng trong database
+* GET /api/order/:id : trả về một đơn hàng dựa trên id
+* GET /api/order/by-user : trả về tất cả đơn hàng của user đang đăng nhập
+* POST /api/order: thêm một đơn hàng mới
+* PUT /api/order/status/:id : cập nhật trạng thái đơn hàng dựa trên id
+* PUT /api/order/address/:id : cập nhật địa chỉ đơn hàng dựa trên id
+* PUT /api/order/cash/:id : cập nhật trạng thái chưa thanh toán sang đã thanh toán dựa trên id
+
+## Payment API
+* GET /api/payment/vnp_ipn: kiểm tra thông tin thanh toán không bị thay đổi, được sử dụng để trao đổi giữa server với VNPAY sau khi website được deloy
+* POSt /api/payment/create-vnp-url: tạo url thanh toán VNPAY
