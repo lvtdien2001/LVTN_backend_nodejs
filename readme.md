@@ -1,6 +1,4 @@
-# API
-
-- [API](#api)
+- [API]
   - [User APIs](#user-apis)
   - [Address APIs](#address-apis)
   - [Brand APIs](#brand-apis)
