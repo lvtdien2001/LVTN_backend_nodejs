@@ -8,6 +8,7 @@
 - [Goods received note APIs](#goods-received-note-apis)
 - [Order APIs](#order-apis)
 - [Payment APIs](#payment-apis)
+- [Comment APIs](#comment-apis)
 
 ## User APIs
 * POST /api/auth/register: đăng ký tài khoản
