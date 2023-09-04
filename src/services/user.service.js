@@ -23,6 +23,13 @@ class UserService {
     async findById(userId) {
         try {
             const user = await userModel.findById(userId).select('-password');
+            if (!user) {
+                return {
+                    statusCode: 404,
+                    success: false,
+                    msg: 'User not found'
+                }
+            }
             return {
                 statusCode: 200,
                 success: true,

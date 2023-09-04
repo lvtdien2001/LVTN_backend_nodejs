@@ -9,7 +9,7 @@ const verifyToken = (req, res, next) => {
 
     // check public router
     const routesReg = /\/brand|\/product/;
-    const isPublicRoutes = /\/auth/.test(req.originalUrl) || (routesReg.test(req.originalUrl) && req.method === 'GET');
+    const isPublicRoutes = /\/auth\/login|\/auth\/register/.test(req.originalUrl) || (routesReg.test(req.originalUrl) && req.method === 'GET');
     if (isPublicRoutes) {
         return next();
     }
