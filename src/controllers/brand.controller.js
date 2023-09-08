@@ -60,7 +60,7 @@ exports.create = async (req, res) => {
         res.status(rsp.statusCode).json({
             success: rsp.success,
             msg: rsp.msg,
-            brand: rsp.brand
+            newBrand: rsp.newBrand
         })
     } catch (error) {
         console.log(error);
@@ -85,7 +85,7 @@ exports.update = async (req, res) => {
         res.status(rsp.statusCode).json({
             success: rsp.success,
             msg: rsp.msg,
-            brand: rsp.updateBrand
+            updatedBrand: rsp.updatedBrand
         })
     } catch (error) {
         console.log(error);
@@ -107,7 +107,7 @@ exports.delete = async (req, res) => {
         res.status(rsp.statusCode).json({
             success: rsp.success,
             msg: rsp.msg,
-            brand: rsp.deleteBrand
+            deletedBrand: rsp.deletedBrand
         })
     } catch (error) {
         console.log(error);

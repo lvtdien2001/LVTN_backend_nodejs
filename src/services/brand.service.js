@@ -1,4 +1,5 @@
 import brandModel from '../models/brand.model';
+import productModel from '../models/product.model';
 import cloudinary from '../utils/cloudinary';
 
 class BrandService {
@@ -57,7 +58,7 @@ class BrandService {
                 statusCode: 200,
                 success: true,
                 msg: 'Chúc mừng bạn đã thêm thương hiệu mới thành công',
-                brand: newBrand
+                newBrand: newBrand
             }
         } catch (error) {
             console.log(error);
@@ -87,12 +88,12 @@ class BrandService {
                 }
             }
 
-            const updateBrand = await brandModel.findByIdAndUpdate(
+            const updatedBrand = await brandModel.findByIdAndUpdate(
                 brandId,
                 updateData,
                 { new: true }
             );
-            if (!updateBrand) {
+            if (!updatedBrand) {
                 await cloudinary.uploader.destroy(updateData.logo.cloudId);
                 return {
                     statusCode: 404,
@@ -105,7 +106,7 @@ class BrandService {
                 statusCode: 200,
                 success: true,
                 msg: 'Cập nhật thông tin thương hiệu thành công',
-                updateBrand
+                updatedBrand
             }
         } catch (error) {
             console.log(error);
@@ -119,8 +120,16 @@ class BrandService {
 
     async delete(brandId) {
         try {
-            const deleteBrand = await brandModel.findByIdAndDelete(brandId);
-            if (!deleteBrand) {
+            const countProducts = await productModel.countDocuments({ brand: brandId });
+            if (countProducts > 0) {
+                return {
+                    statusCode: 401,
+                    success: false,
+                    msg: 'Bạn cần xóa tất cả sản phẩm của thương hiệu này trước, để tránh một số lỗi phát sinh!'
+                }
+            }
+            const deletedBrand = await brandModel.findByIdAndDelete(brandId);
+            if (!deletedBrand) {
                 return {
                     statusCode: 404,
                     success: false,
@@ -129,13 +138,13 @@ class BrandService {
             }
 
             // delete logo in cloud
-            await cloudinary.uploader.destroy(deleteBrand.logo.cloudId);
+            await cloudinary.uploader.destroy(deletedBrand.logo.cloudId);
 
             return {
                 statusCode: 200,
                 success: true,
                 msg: 'Xóa thương hiệu thành công',
-                deleteBrand
+                deletedBrand
             }
         } catch (error) {
             console.log(error);
