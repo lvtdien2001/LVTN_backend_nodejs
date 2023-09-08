@@ -141,12 +141,15 @@ class ProductService {
                 createdBy: userId,
                 updatedBy: userId
             })
-            await newProduct.save()
+            await newProduct.save();
+            const product = await productModel
+                .findById(newProduct._id)
+                .populate('brand', ['_id', 'name', 'logo'])
             return {
                 statusCode: 200,
                 success: true,
                 msg: 'Thêm sản phẩm mới thành công',
-                newProduct
+                newProduct: product
             }
         } catch (error) {
             console.log(error);
