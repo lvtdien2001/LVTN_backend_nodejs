@@ -20,16 +20,22 @@ exports.findById = async (req, res) => {
     }
 }
 
-// @route GET /product?brandId=...&styleCode=...
+// @route GET /product
+// @query page, brand, styleCode, strapCode, glassCode, systemCode
 exports.findAll = async (req, res) => {
     try {
-        const brandId = req.query.brandId;
+        const brand = req.query.brand;
         const styleCode = req.query.styleCode;
+        const strapCode = req.query.strapCode;
+        const glassCode = req.query.glassCode;
+        const systemCode = req.query.systemCode;
+        const page = req.query.page;
         const productService = new ProductService();
-        const rsp = await productService.find(brandId, styleCode);
+        const rsp = await productService.find({ brand, styleCode, strapCode, glassCode, systemCode }, page);
         res.status(rsp.statusCode).json({
             msg: rsp.msg,
             success: rsp.success,
+            pagination: rsp.pagination,
             products: rsp.products
         })
     } catch (error) {

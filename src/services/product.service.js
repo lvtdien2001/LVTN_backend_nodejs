@@ -50,28 +50,45 @@ class ProductService {
         }
     }
 
-    async find(brandId, styleCode) {
+    async find(condition, page) {
         try {
             let findCondition = {};
-            if (brandId) {
-                findCondition = {
-                    ...findCondition,
-                    brand: brandId
-                }
+            if (condition.brand) {
+                findCondition = { brand: condition.brand };
             }
-            if (styleCode) {
-                findCondition = {
-                    ...findCondition,
-                    'style.code': styleCode
-                }
+            if (condition.styleCode) {
+                findCondition = { ...findCondition, 'style.code': condition.styleCode }
             }
+            if (condition.strapCode) {
+                findCondition = { ...findCondition, 'strap.code': condition.strapCode }
+            }
+            if (condition.glassCode) {
+                findCondition = { ...findCondition, 'glass.code': condition.glassCode }
+            }
+            if (condition.systemCode) {
+                findCondition = { ...findCondition, 'system.code': condition.systemCode }
+            }
+            const docs = await productModel.countDocuments(findCondition);
+            const lastPage = Math.ceil(docs / 10);
+            const currentPage = page || 1;
+            const productPerPage = 10;
+            const skipPage = (Number(currentPage) - 1) * productPerPage;
+
             const products = await productModel
                 .find(findCondition)
                 .populate('brand', ['_id', 'name', 'logo'])
-                .sort({ 'createdAt': -1 })
+                .sort({ 'updatedAt': -1 })
+                .skip(skipPage)
+                .limit(productPerPage)
             return {
                 statusCode: 200,
                 success: true,
+                pagination: {
+                    currentPage,
+                    productPerPage,
+                    lastPage,
+                    countProduct: docs
+                },
                 products
             }
         } catch (error) {
