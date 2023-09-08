@@ -97,7 +97,7 @@ exports.update = async (req, res) => {
         res.status(rsp.statusCode).json({
             msg: rsp.msg,
             success: rsp.success,
-            updateProduct: rsp.updateProduct
+            updatedProduct: rsp.updatedProduct
         })
     } catch (error) {
         console.log(error);

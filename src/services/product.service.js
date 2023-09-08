@@ -11,6 +11,8 @@ class ProductService {
                     name: item.name,
                     code: item.code
                 };
+            } else {
+                return -1;
             }
         } catch (error) {
             console.log(error);
@@ -54,7 +56,7 @@ class ProductService {
             if (brandId) {
                 findCondition = {
                     ...findCondition,
-                    brandId
+                    brand: brandId
                 }
             }
             if (styleCode) {
@@ -65,7 +67,8 @@ class ProductService {
             }
             const products = await productModel
                 .find(findCondition)
-                .populate('brandId', ['_id', 'name', 'logo'])
+                .populate('brand', ['_id', 'name', 'logo'])
+                .sort({ 'createdAt': -1 })
             return {
                 statusCode: 200,
                 success: true,
@@ -85,7 +88,7 @@ class ProductService {
         try {
             const product = await productModel
                 .findById(productId)
-                .populate('brandId', ['_id', 'name', 'logo'])
+                .populate('brand', ['_id', 'name', 'logo'])
             return {
                 statusCode: 200,
                 success: true,
@@ -110,7 +113,7 @@ class ProductService {
             const image = await this.uploadImage(payload.image, 'products');
 
             const newProduct = new productModel({
-                brandId: payload.brandId,
+                brand: payload.brandId,
                 name: payload.name,
                 style,
                 strap,
@@ -125,6 +128,7 @@ class ProductService {
             return {
                 statusCode: 200,
                 success: true,
+                msg: 'Thêm sản phẩm mới thành công',
                 newProduct
             }
         } catch (error) {
@@ -139,23 +143,31 @@ class ProductService {
 
     async update(userId, productId, payload) {
         try {
-            const newImage = await this.uploadImage(payload.image, 'products');
             const style = await this.getStaticData(payload.styleCode, 'style');
             const strap = await this.getStaticData(payload.strapCode, 'strap');
             const glass = await this.getStaticData(payload.glassCode, 'glass');
             const system = await this.getStaticData(payload.systemCode, 'system');
             const description = payload.description;
             const brandId = payload.brandId;
+            const name = payload.name;
 
-            const updateData = {
-                image: newImage, brandId, style, strap, glass, system, updatedBy: userId, description
+            let updateData = {
+                name, brand: brandId, style, strap, glass, system, updatedBy: userId, description
+            }
+
+            if (payload.image) {
+                const newImage = await this.uploadImage(payload.image, 'products');
+                updateData = {
+                    ...updateData,
+                    image: newImage
+                }
             }
             const oldImageId = await this.getCloudId(productId);
-            const updateProduct = await productModel
+            const updatedProduct = await productModel
                 .findByIdAndUpdate(productId, updateData, { new: true })
-                .populate('brandId', ['_id', 'name', 'logo'])
+                .populate('brand', ['_id', 'name', 'logo'])
 
-            if (!updateProduct) {
+            if (!updatedProduct) {
                 await cloudinary.uploader.destroy(newImage.cloudId);
                 return {
                     status: 404,
@@ -163,11 +175,11 @@ class ProductService {
                     msg: 'Product not found'
                 }
             }
-            await cloudinary.uploader.destroy(oldImageId);
+            payload.image && await cloudinary.uploader.destroy(oldImageId);
             return {
                 statusCode: 200,
                 success: true,
-                updateProduct,
+                updatedProduct,
                 msg: 'Cập nhật thông tin sản phẩm thành công'
             }
         } catch (error) {
@@ -201,7 +213,7 @@ class ProductService {
         try {
             const deleteProduct = await productModel
                 .findByIdAndDelete(productId)
-                .populate('brandId', ['_id', 'name', 'logo'])
+                .populate('brand', ['_id', 'name', 'logo'])
 
             if (!deleteProduct) {
                 return {
