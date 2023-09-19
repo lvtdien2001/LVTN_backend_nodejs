@@ -5,16 +5,27 @@ const warrantyCardSchema = new Schema({
     product: {
         type: Schema.Types.ObjectId,
         ref: 'product',
-        required
-    },
-    order: {
-        type: Schema.Types.ObjectId,
-        ref: 'order',
-        required
+        required: true
     },
     deadline: {
-        type: Date,
-        required
+        from: {
+            type: Date,
+            default: Date.now()
+        },
+        to: {
+            type: Date,
+            required: true
+        }
+    },
+    customerInfo: {
+        fullName: {
+            type: String,
+            required: true
+        },
+        phoneNumber: {
+            type: String,
+            required: true
+        }
     }
 }, { timestamps: true });
 
