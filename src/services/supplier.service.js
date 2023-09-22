@@ -1,4 +1,5 @@
 import supplierModel from '../models/supplier.model';
+import goodsReceivedNoteModel from '../models/goodsReceivedNote.model';
 
 class SupplierService {
     async findById(supplierId) {
@@ -110,6 +111,15 @@ class SupplierService {
 
     async delete(supplierId) {
         try {
+            const docs = await goodsReceivedNoteModel.countDocuments({ 'products.supplier': supplierId });
+            if (docs > 0) {
+                return {
+                    statusCode: 400,
+                    success: false,
+                    msg: 'Không thể xóa nhà cung cấp này'
+                }
+            }
+
             const deletedSupplier = await supplierModel.findByIdAndDelete(supplierId);
             if (!deletedSupplier) {
                 return {
