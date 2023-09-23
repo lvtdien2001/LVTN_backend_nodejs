@@ -1,4 +1,5 @@
 import priceModel from '../models/price.model';
+import productModel from '../models/product.model';
 
 class PriceService {
     async findById(id) {
@@ -33,6 +34,7 @@ class PriceService {
             const prices = await priceModel
                 .find({ product: productId })
                 .populate('product', ['_id', 'name'])
+                .sort({ createdAt: -1 })
             return {
                 statusCode: 200,
                 success: true,
@@ -55,6 +57,7 @@ class PriceService {
                 value: payload.value
             });
             await newPrice.save();
+            await productModel.updateOne({ _id: payload.productId }, { price: newPrice.value });
             return {
                 statusCode: 200,
                 success: true,

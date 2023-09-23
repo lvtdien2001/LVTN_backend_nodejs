@@ -27,17 +27,18 @@ class GoodsReceivedNoteService {
         }
     }
 
-    async findAll() {
+    async findAll(productId) {
         try {
+            let condition = productId && { 'products.product': productId };
             const goodsReceivedNotes = await goodsReceivedNoteModel
-                .find()
+                .find(condition)
                 .populate('createdBy', ['_id', 'email', 'fullName', 'phoneNumber'])
                 .populate('updatedBy', ['_id', 'email', 'fullName', 'phoneNumber'])
                 .populate({
                     path: 'products',
-                    populate: { path: 'product', select: ['_id', 'name'] },
                     populate: { path: 'supplier' }
                 })
+                .sort({ createdAt: -1 })
             return {
                 statusCode: 200,
                 success: true,

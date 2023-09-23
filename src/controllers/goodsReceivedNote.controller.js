@@ -20,11 +20,11 @@ exports.findById = async (req, res) => {
     }
 }
 
-// @route GET /goods-received-note
+// @route GET /goods-received-note?productId
 exports.findAll = async (req, res) => {
     try {
         const goodsReceivedNoteService = new GoodsReceivedNoteService();
-        const rsp = await goodsReceivedNoteService.findAll();
+        const rsp = await goodsReceivedNoteService.findAll(req.query.productId);
         res.status(rsp.statusCode).json({
             success: rsp.success,
             msg: rsp.msg,

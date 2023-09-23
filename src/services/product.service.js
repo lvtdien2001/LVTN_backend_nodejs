@@ -77,7 +77,6 @@ class ProductService {
             const products = await productModel
                 .find(findCondition)
                 .populate('brand', ['_id', 'name', 'logo'])
-                .sort({ 'updatedAt': -1 })
                 .skip(skipPage)
                 .limit(productPerPage)
             return {
