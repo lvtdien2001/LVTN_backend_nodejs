@@ -22,6 +22,11 @@ const productSchema = new Schema({
         type: Number,
         default: 0
     },
+    gender: {
+        type: Number,
+        default: 0,
+        enum: [0, 1, 2] // 0: both, 1: male, 2: female
+    },
     style: {
         name: {
             type: String,

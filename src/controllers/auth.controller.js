@@ -23,12 +23,9 @@ exports.getUser = async (req, res) => {
 // @route POST /auth/register
 exports.register = async (req, res) => {
     try {
-        const data = {
-            email: req.body.email,
-            password: req.body.password,
-            fullName: req.body.fullName,
-            phoneNumber: req.body.phoneNumber
-        }
+        const { email, password, fullName, phoneNumber, otp } = req.body;
+
+        const data = { email, password, fullName, phoneNumber, otp }
 
         const authService = new AuthService();
         const rsp = await authService.create(data);
@@ -36,6 +33,24 @@ exports.register = async (req, res) => {
             success: rsp.success,
             msg: rsp.msg,
             accessToken: rsp.accessToken
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            msg: 'Internal server error'
+        })
+    }
+}
+
+exports.checkAccount = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const authService = new AuthService();
+        const rsp = await authService.checkAccount(email);
+        res.status(rsp.statusCode).json({
+            success: rsp.success,
+            msg: rsp.msg
         })
     } catch (error) {
         console.log(error);

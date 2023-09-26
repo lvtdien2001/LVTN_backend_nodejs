@@ -68,11 +68,13 @@ class ProductService {
             if (condition.systemCode) {
                 findCondition = { ...findCondition, 'system.code': condition.systemCode }
             }
-            const docs = await productModel.countDocuments(findCondition);
-            const lastPage = Math.ceil(docs / 10);
-            const currentPage = page || 1;
-            const productPerPage = 10;
-            const skipPage = (Number(currentPage) - 1) * productPerPage;
+            let docs, lastPage, productPerPage, skipPage;
+            if (page) {
+                docs = await productModel.countDocuments(findCondition);
+                lastPage = Math.ceil(docs / 10);
+                productPerPage = 10;
+                skipPage = (Number(page) - 1) * productPerPage;
+            }
 
             const products = await productModel
                 .find(findCondition)
@@ -83,7 +85,7 @@ class ProductService {
                 statusCode: 200,
                 success: true,
                 pagination: {
-                    currentPage,
+                    currentPage: page,
                     productPerPage,
                     lastPage,
                     countProduct: docs
@@ -131,6 +133,7 @@ class ProductService {
             const newProduct = new productModel({
                 brand: payload.brandId,
                 name: payload.name,
+                gender: payload.gender,
                 style,
                 strap,
                 glass,
@@ -171,7 +174,7 @@ class ProductService {
             const name = payload.name;
 
             let updateData = {
-                name, brand: brandId, style, strap, glass, system, updatedBy: userId, description
+                name, brand: brandId, style, strap, glass, system, updatedBy: userId, description, gender: payload.gender
             }
 
             if (payload.image) {

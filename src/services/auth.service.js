@@ -1,8 +1,35 @@
 import userModel from '../models/user.model';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
+import otpService from '../services/otp.service';
 
 class AuthService {
+    async checkAccount(email) {
+        try {
+            // check user exist
+            const user = await userModel.findOne({ email });
+            if (user) {
+                return {
+                    statusCode: 400,
+                    success: false,
+                    msg: 'Email này đã có tài khoản!'
+                }
+            }
+            return {
+                statusCode: 200,
+                success: true,
+                msg: 'OK'
+            }
+        } catch (error) {
+            console.log(error);
+            return {
+                statusCode: 500,
+                success: false,
+                msg: 'Internal server error'
+            }
+        }
+    }
+
     async create(data) {
         try {
             // check user exist
@@ -21,6 +48,15 @@ class AuthService {
                     statusCode: 400,
                     success: false,
                     msg: 'Email và mật khẩu không thể bỏ trống!'
+                }
+            }
+
+            const isValidOTP = await otpService.checkOTP(data.email, data.otp);
+            if (!isValidOTP) {
+                return {
+                    statusCode: 401,
+                    success: false,
+                    msg: 'Invalid OTP'
                 }
             }
 

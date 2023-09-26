@@ -12,6 +12,7 @@ import paymentRouter from './payment.route';
 import commentRouter from './comment.route';
 import priceRouter from './price.route';
 import warrantyCardRouter from './warrantyCard.route';
+import otpRouter from './otp.route';
 
 const initRouter = (app) => {
     app.use('/api/auth', authRouter);
@@ -27,6 +28,7 @@ const initRouter = (app) => {
     app.use('/api/comment', commentRouter);
     app.use('/api/price', priceRouter);
     app.use('/api/warranty-card', warrantyCardRouter);
+    app.use('/api/otp', otpRouter)
 }
 
 export default initRouter

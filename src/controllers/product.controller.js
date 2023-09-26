@@ -65,7 +65,8 @@ exports.create = async (req, res) => {
             strapCode: req.body.strapCode,
             glassCode: req.body.glassCode,
             systemCode: req.body.systemCode,
-            description: req.body.description
+            description: req.body.description,
+            gender: req.body.gender
         }
         const productService = new ProductService();
         const rsp = await productService.create(userId, payload);
@@ -96,7 +97,8 @@ exports.update = async (req, res) => {
             strapCode: req.body.strapCode,
             glassCode: req.body.glassCode,
             systemCode: req.body.systemCode,
-            description: req.body.description
+            description: req.body.description,
+            gender: req.body.gender
         }
         const productService = new ProductService();
         const rsp = await productService.update(userId, productId, payload);
