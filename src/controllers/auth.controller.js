@@ -43,6 +43,7 @@ exports.register = async (req, res) => {
     }
 }
 
+// @route POST /auth/check-account
 exports.checkAccount = async (req, res) => {
     try {
         const { email } = req.body;
@@ -98,6 +99,25 @@ exports.loginAdmin = async (req, res) => {
             success: rsp.success,
             msg: rsp.msg,
             accessToken: rsp.accessToken
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            msg: 'Internal server error'
+        })
+    }
+}
+
+// @route POST /auth/forgot-password
+exports.forgotPassword = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        const authService = new AuthService();
+        const rsp = await authService.forgotPassword({ email, otp });
+        res.status(rsp.statusCode).json({
+            success: rsp.success,
+            msg: rsp.msg
         })
     } catch (error) {
         console.log(error);

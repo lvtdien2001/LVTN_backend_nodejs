@@ -2,6 +2,7 @@ import userModel from '../models/user.model';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 import otpService from '../services/otp.service';
+import nodemailer from '../utils/nodemailer';
 
 class AuthService {
     async checkAccount(email) {
@@ -193,6 +194,54 @@ class AuthService {
         }
     }
 
+    async forgotPassword(payload) {
+        try {
+            const { email, otp } = payload;
+            if (!email || !otp) {
+                return {
+                    statusCode: 401,
+                    success: false,
+                    msg: 'Invalid data'
+                }
+            }
+
+            // check OTP
+            const isValidOTP = await otpService.checkOTP(email, otp);
+            if (!isValidOTP) {
+                return {
+                    statusCode: 401,
+                    success: false,
+                    msg: 'Invalid OTP'
+                }
+            }
+
+            // create new password
+            const newPassword = Math.random().toString(36).slice(-8);
+            const hashedPassword = await argon2.hash(newPassword);
+            await userModel.updateOne({ email }, { password: hashedPassword });
+
+            // send email
+            await nodemailer.sendMail({
+                from: process.env.MAIL_USERNAME,
+                to: email,
+                subject: 'Cấp lại mật khẩu',
+                text: `Mật khẩu mới của bạn là ${newPassword}`
+            });
+
+            return {
+                statusCode: 200,
+                success: true,
+                msg: 'Mật khẩu đã được gửi qua email của bạn'
+            }
+        } catch (error) {
+            console.log(error);
+            return {
+                statusCode: 500,
+                success: false,
+                msg: 'Internal server error'
+            }
+        }
+    }
 }
 
 export default AuthService
