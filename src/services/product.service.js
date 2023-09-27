@@ -122,6 +122,50 @@ class ProductService {
         }
     }
 
+    async findHotProducts() {
+        try {
+            const products = await productModel
+                .find()
+                .limit(4)
+                .sort({ sold: -1 })
+
+            return {
+                statusCode: 200,
+                products,
+                success: true
+            }
+        } catch (error) {
+            console.log(error);
+            return {
+                statusCode: 500,
+                success: false,
+                msg: 'Internal server error'
+            }
+        }
+    }
+
+    async findNewProducts() {
+        try {
+            const products = await productModel
+                .find()
+                .limit(12)
+                .sort({ createdAt: -1 })
+
+            return {
+                statusCode: 200,
+                products,
+                success: true
+            }
+        } catch (error) {
+            console.log(error);
+            return {
+                statusCode: 500,
+                success: false,
+                msg: 'Internal server error'
+            }
+        }
+    }
+
     async create(userId, payload) {
         try {
             const style = await this.getStaticData(payload.styleCode, 'style');

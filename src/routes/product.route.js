@@ -5,6 +5,8 @@ import verifyAdmin from '../middleware/verifyAdmin';
 
 const router = express.Router();
 
+router.get('/hot', productController.findHotProducts);
+router.get('/new', productController.findNewProducts);
 router.get('/:id', productController.findById);
 router.get('/', productController.findAll);
 router.post('/', verifyAdmin, upload.single('image'), productController.create);
