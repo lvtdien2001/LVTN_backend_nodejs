@@ -85,6 +85,28 @@ exports.findNewProducts = async (req, res) => {
     }
 }
 
+// @route GET /product/suggest
+exports.findSuggestProducts = async (req, res) => {
+    try {
+        const { price, gender, id } = req.query;
+        const payload = { price, gender, id }
+
+        const productService = new ProductService();
+        const rsp = await productService.findSuggestProducts(payload);
+        res.status(rsp.statusCode).json({
+            msg: rsp.msg,
+            success: rsp.success,
+            products: rsp.products
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            msg: 'Internal server error'
+        })
+    }
+}
+
 // @route POST /product
 exports.create = async (req, res) => {
     if (!req.file) {

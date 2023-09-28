@@ -166,6 +166,31 @@ class ProductService {
         }
     }
 
+    async findSuggestProducts(payload) {
+        try {
+            const { gender, price, id } = payload;
+
+            const products = await productModel
+                .find({ gender, price: { $lte: Number(price) + 2000000 } })
+                .sort({ price: -1 })
+                .ne('_id', id)
+                .limit(4)
+
+            return {
+                statusCode: 200,
+                products,
+                success: true
+            }
+        } catch (error) {
+            console.log(error);
+            return {
+                statusCode: 500,
+                success: false,
+                msg: 'Internal server error'
+            }
+        }
+    }
+
     async create(userId, payload) {
         try {
             const style = await this.getStaticData(payload.styleCode, 'style');
