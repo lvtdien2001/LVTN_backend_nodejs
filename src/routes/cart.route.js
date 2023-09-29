@@ -3,6 +3,7 @@ import cartController from '../controllers/cart.controller';
 
 const router = express.Router();
 
+router.get('/count', cartController.countProducts);
 router.get('/:id', cartController.findById);
 router.get('/', cartController.findAll);
 router.post('/', cartController.create);

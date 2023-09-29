@@ -6,7 +6,10 @@ class CartService {
         try {
             const product = await productModel.findById(productId);
             if (product) {
-                return quantity <= product.inventory;
+                const success = quantity <= product.inventory;
+                return {
+                    success, inventory: product.inventory
+                };
             }
         } catch (error) {
             console.log(error);
@@ -56,14 +59,32 @@ class CartService {
         }
     }
 
+    async countProducts(userId) {
+        try {
+            const docs = await cartModel.countDocuments({ user: userId });
+            return {
+                statusCode: 200,
+                success: true,
+                numberOfProducts: docs
+            }
+        } catch (error) {
+            console.log(error);
+            return {
+                statusCode: 500,
+                success: false,
+                msg: 'Internal server error'
+            }
+        }
+    }
+
     async create(userId, productId, quantity) {
         try {
             const checkQuantity = await this.checkInventory(productId, quantity);
-            if (!checkQuantity || quantity <= 0) {
+            if (!checkQuantity.success || quantity <= 0) {
                 return {
                     statusCode: 401,
                     success: true,
-                    msg: 'Invalid quantity or product not found'
+                    msg: `Số lượng tồn kho của sản phẩm này chỉ còn ${checkQuantity.inventory}`
                 }
             }
 
@@ -102,11 +123,11 @@ class CartService {
     async update(userId, cartId, quantity, productId) {
         try {
             const checkQuantity = await this.checkInventory(productId, quantity);
-            if (!checkQuantity || quantity <= 0) {
+            if (!checkQuantity.success || quantity <= 0) {
                 return {
                     statusCode: 401,
                     success: false,
-                    msg: 'Invalid quantity or product not found'
+                    msg: `Số lượng tồn kho của sản phẩm này chỉ còn ${checkQuantity.inventory}`
                 }
             }
             const updateCondition = {

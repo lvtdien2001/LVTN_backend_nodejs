@@ -41,6 +41,25 @@ exports.findById = async (req, res) => {
     }
 }
 
+// @route GET /cart/count
+exports.countProducts = async (req, res) => {
+    try {
+        const cartService = new CartService();
+        const rsp = await cartService.countProducts(req.user?.id);
+        res.status(rsp.statusCode).json({
+            success: rsp.success,
+            msg: rsp.msg,
+            numberOfProducts: rsp.numberOfProducts
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            msg: 'Internal server error'
+        })
+    }
+}
+
 // @route POST /cart
 exports.create = async (req, res) => {
     try {

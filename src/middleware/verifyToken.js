@@ -22,7 +22,7 @@ const verifyToken = (req, res, next) => {
     if (!token) {
         return res.status(400).json({
             success: false,
-            msg: 'Access token not found'
+            msg: 'Bạn cần đăng nhập để thực hiện chức năng này'
         })
     }
 
