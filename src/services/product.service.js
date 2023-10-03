@@ -300,6 +300,36 @@ class ProductService {
         }
     }
 
+    async reduceInventory(products) {
+        try {
+            for (let i in products) {
+                await productModel.updateOne({ _id: products[i].product }, { $inc: { 'inventory': Number(`-${products[i].quantity}`) } });
+            }
+        } catch (error) {
+            console.log(error);
+            return {
+                statusCode: 500,
+                success: false,
+                msg: 'Internal server error'
+            }
+        }
+    }
+
+    async increaseSold(products) {
+        try {
+            for (let i in products) {
+                await productModel.updateOne({ _id: products[i].product }, { $inc: { 'sold': products[i].quantity } });
+            }
+        } catch (error) {
+            console.log(error);
+            return {
+                statusCode: 500,
+                success: false,
+                msg: 'Internal server error'
+            }
+        }
+    }
+
     async delete(productId) {
         try {
             const deleteProduct = await productModel

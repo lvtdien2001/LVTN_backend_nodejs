@@ -126,3 +126,23 @@ exports.delete = async (req, res) => {
         })
     }
 }
+
+// @route DELETE /cart
+exports.deleteAll = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const cartService = new CartService();
+        const rsp = await cartService.deleteAll(userId);
+        res.status(rsp.statusCode).json({
+            success: rsp.success,
+            msg: rsp.msg
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            msg: 'Internal server error'
+        })
+    }
+}

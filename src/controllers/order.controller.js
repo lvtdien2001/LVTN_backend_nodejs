@@ -1,4 +1,5 @@
 import OrderService from '../services/order.service';
+import ProductService from '../services/product.service';
 
 // @route GET /order/:id
 exports.findById = async (req, res) => {
@@ -67,8 +68,11 @@ exports.create = async (req, res) => {
             address: req.body.address,
             products: req.body.products
         }
+        const productService = new ProductService();
         const orderService = new OrderService();
         const rsp = await orderService.create(payload);
+        await productService.increaseSold(req.body.products);
+        await productService.reduceInventory(req.body.products);
         res.status(rsp.statusCode).json({
             success: rsp.success,
             msg: rsp.msg,

@@ -187,6 +187,23 @@ class CartService {
             }
         }
     }
+
+    async deleteAll(userId) {
+        try {
+            await cartModel.deleteMany({ user: userId });
+            return {
+                statusCode: 200,
+                success: true
+            }
+        } catch (error) {
+            console.log(error);
+            return {
+                statusCode: 500,
+                success: false,
+                msg: 'Internal server error'
+            }
+        }
+    }
 }
 
 export default CartService

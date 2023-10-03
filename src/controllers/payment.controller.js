@@ -1,4 +1,5 @@
 import moment from 'moment';
+import OrderService from '../services/order.service';
 
 const sortObject = obj => {
     let sorted = {};
@@ -18,8 +19,15 @@ const sortObject = obj => {
 
 // @route POST /payment/create-vnp-url
 exports.createVnpUrl = (req, res) => {
-    process.env.TZ = 'Asia/Ho_Chi_Minh';
+    const { orderId, amount } = req.body;
+    if (!orderId || !amount) {
+        return res.status(400).json({
+            success: false,
+            msg: 'orderId/amount is required'
+        })
+    }
 
+    process.env.TZ = 'Asia/Ho_Chi_Minh';
     let date = new Date();
     let createDate = moment(date).format('YYYYMMDDHHmmss');
 
@@ -29,7 +37,6 @@ exports.createVnpUrl = (req, res) => {
         req.connection.socket.remoteAddress;
 
     let vnpUrl = process.env.vnp_Url;
-    let orderId = moment(date).format('DDHHmmss');
 
     let vnp_Params = {};
     vnp_Params['vnp_Version'] = '2.1.0';
@@ -40,7 +47,7 @@ exports.createVnpUrl = (req, res) => {
     vnp_Params['vnp_TxnRef'] = orderId;
     vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + orderId;
     vnp_Params['vnp_OrderType'] = '200000';
-    vnp_Params['vnp_Amount'] = req.body.amount * 100;
+    vnp_Params['vnp_Amount'] = amount * 100;
     vnp_Params['vnp_ReturnUrl'] = process.env.vnp_ReturnUrl;
     vnp_Params['vnp_IpAddr'] = ipAddr;
     vnp_Params['vnp_CreateDate'] = createDate;
@@ -55,12 +62,16 @@ exports.createVnpUrl = (req, res) => {
     vnp_Params['vnp_SecureHash'] = signed;
     vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
 
-    res.redirect(vnpUrl)
+    res.status(200).json({
+        success: true,
+        vnpUrl
+    })
 }
 
-// @route GET /vnp_ipn?<Params>
-exports.checksum = (req, res) => {
+// @route GET /payment/vnp_ipn?<Params>
+exports.checksum = async (req, res) => {
     let vnp_Params = req.query;
+
     const secureHash = vnp_Params['vnp_SecureHash'];
 
     delete vnp_Params['vnp_SecureHash'];
@@ -77,11 +88,94 @@ exports.checksum = (req, res) => {
     if (secureHash === signed) {
         const orderId = vnp_Params['vnp_TxnRef'];
         const rspCode = vnp_Params['vnp_ResponseCode'];
-        //Kiem tra du lieu co hop le khong, cap nhat trang thai don hang va gui ket qua cho VNPAY theo dinh dang duoi
 
-        res.status(200).json({ RspCode: '00', Message: 'success' })
+        switch (rspCode) {
+            case '00':
+                const orderService = new OrderService();
+                await orderService.updatePaymentStatus(orderId);
+                await orderService.updateStatus(orderId, '02');
+                res.status(200).json({
+                    success: true,
+                    msg: 'Thanh toán thành công, cảm ơn quý khách đã ủng hộ!'
+                })
+                break;
+            case '07':
+                res.status(400).json({
+                    success: false,
+                    msg: 'Trừ tiền thành công. Giao dịch bị nghi ngờ (liên quan tới lừa đảo, giao dịch bất thường).'
+                })
+                break;
+            case '09':
+                res.status(400).json({
+                    success: false,
+                    msg: 'Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng chưa đăng ký dịch vụ InternetBanking tại ngân hàng.'
+                })
+                break;
+            case '10':
+                res.status(400).json({
+                    success: false,
+                    msg: 'Giao dịch không thành công do: Khách hàng xác thực thông tin thẻ/tài khoản không đúng quá 3 lần'
+                })
+                break;
+            case '11':
+                res.status(400).json({
+                    success: false,
+                    msg: 'Giao dịch không thành công do: Đã hết hạn chờ thanh toán. Xin quý khách vui lòng thực hiện lại giao dịch.'
+                })
+                break;
+            case '12':
+                res.status(400).json({
+                    success: false,
+                    msg: 'Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng bị khóa.'
+                })
+                break;
+            case '13':
+                res.status(400).json({
+                    success: false,
+                    msg: 'Giao dịch không thành công do Quý khách nhập sai mật khẩu xác thực giao dịch (OTP). Xin quý khách vui lòng thực hiện lại giao dịch.'
+                })
+                break;
+            case '24':
+                res.status(400).json({
+                    success: false,
+                    msg: 'Giao dịch không thành công do: Khách hàng hủy giao dịch'
+                })
+                break;
+            case '51':
+                res.status(400).json({
+                    success: false,
+                    msg: 'Giao dịch không thành công do: Tài khoản của quý khách không đủ số dư để thực hiện giao dịch.'
+                })
+                break;
+            case '65':
+                res.status(400).json({
+                    success: false,
+                    msg: 'Giao dịch không thành công do: Tài khoản của Quý khách đã vượt quá hạn mức giao dịch trong ngày.'
+                })
+                break;
+            case '75':
+                res.status(400).json({
+                    success: false,
+                    msg: 'Ngân hàng thanh toán đang bảo trì.'
+                })
+                break;
+            case '79':
+                res.status(400).json({
+                    success: false,
+                    msg: 'Giao dịch không thành công do: KH nhập sai mật khẩu thanh toán quá số lần quy định. Xin quý khách vui lòng thực hiện lại giao dịch'
+                })
+                break;
+            default:
+                res.status(400).json({
+                    success: false,
+                    msg: 'Xảy ra lỗi trong quá trình giao dịch, quý khách vui lòng liên hệ 1900 55 55 77 để được hỗ trợ'
+                })
+        }
     }
     else {
-        res.status(200).json({ RspCode: '97', Message: 'Fail checksum' })
+        res.status(400).json({
+            success: false,
+            msg: 'Fail checksum'
+        })
     }
 }
