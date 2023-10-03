@@ -3,7 +3,8 @@ import AddressService from '../services/address.service';
 // @route POST /address
 exports.create = async (req, res) => {
     try {
-        const data = req.body;
+        const { fullName, phoneNumber, province, district, ward, description } = req.body;
+        const data = { fullName, phoneNumber, province, district, ward, description };
         const userId = req.user.id;
 
         const addressService = new AddressService();
@@ -12,7 +13,7 @@ exports.create = async (req, res) => {
         res.status(rsp.statusCode).json({
             success: rsp.success,
             msg: rsp.msg,
-            address: rsp.address
+            newAddress: rsp.newAddress
         })
     } catch (error) {
         console.log(error);
@@ -33,6 +34,7 @@ exports.findById = async (req, res) => {
 
         res.status(rsp.statusCode).json({
             success: rsp.success,
+            msg: rsp.msg,
             address: rsp.address
         })
     } catch (error) {
@@ -54,6 +56,7 @@ exports.findByUser = async (req, res) => {
 
         res.status(rsp.statusCode).json({
             success: rsp.success,
+            msg: rsp.msg,
             addresses: rsp.addresses
         })
     } catch (error) {

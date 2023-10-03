@@ -4,8 +4,14 @@ class AddressService {
     async create(data, userId) {
         try {
             const numberOfAddress = await addressModel.countDocuments({ userId });
+
             const newAddress = new addressModel({
-                ...data,
+                fullName: data.fullName,
+                phoneNumber: data.phoneNumber,
+                province: data.province,
+                district: data.district,
+                ward: data.ward,
+                description: data.description,
                 userId,
                 isDefault: numberOfAddress === 0 ? true : false
             });
@@ -15,7 +21,7 @@ class AddressService {
                 statusCode: 200,
                 success: true,
                 msg: 'Chúc mừng bạn đã thêm địa chỉ mới thành công',
-                address: newAddress
+                newAddress: newAddress
             }
         } catch (error) {
             console.log(error);
@@ -29,7 +35,7 @@ class AddressService {
 
     async findById(addressId) {
         try {
-            const address = await addressModel.findById(addressId);
+            const address = await addressModel.findById(addressId)
             return {
                 statusCode: 200,
                 success: true,
@@ -47,7 +53,7 @@ class AddressService {
 
     async findByUser(userId) {
         try {
-            const addresses = await addressModel.find({ userId });
+            const addresses = await addressModel.find({ userId })
             return {
                 statusCode: 200,
                 success: true,

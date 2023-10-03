@@ -11,16 +11,16 @@ const addressSchema = new Schema({
         default: false
     },
     province: {
-        type: String,
-        required: true
+        code: String,
+        name: String
     },
     district: {
-        type: String,
-        required: true
+        code: String,
+        name: String
     },
     ward: {
-        type: String,
-        required: true
+        code: String,
+        name: String
     },
     description: {
         type: String,
