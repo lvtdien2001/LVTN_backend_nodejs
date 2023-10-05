@@ -21,17 +21,13 @@ exports.findById = async (req, res) => {
 }
 
 // @route GET /product
-// @query page, brand, styleCode, strapCode, glassCode, systemCode
+// @query page, brand, styleCode, strapCode, glassCode, systemCode, gender, price
 exports.findAll = async (req, res) => {
     try {
-        const brand = req.query.brand;
-        const styleCode = req.query.styleCode;
-        const strapCode = req.query.strapCode;
-        const glassCode = req.query.glassCode;
-        const systemCode = req.query.systemCode;
-        const page = req.query.page;
+        const { brand, strapCode, styleCode, systemCode, glassCode, price, gender, page } = req.query;
+
         const productService = new ProductService();
-        const rsp = await productService.find({ brand, styleCode, strapCode, glassCode, systemCode }, page);
+        const rsp = await productService.find({ brand, styleCode, strapCode, glassCode, systemCode, gender, price }, page);
         res.status(rsp.statusCode).json({
             msg: rsp.msg,
             success: rsp.success,

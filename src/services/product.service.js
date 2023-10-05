@@ -68,11 +68,30 @@ class ProductService {
             if (condition.systemCode) {
                 findCondition = { ...findCondition, 'system.code': condition.systemCode }
             }
+            if (condition.gender) {
+                findCondition = { ...findCondition, 'gender': condition.gender }
+            }
+            switch (condition.price) {
+                case '01':
+                    findCondition = { ...findCondition, 'price': { $lte: 2000000 } }
+                    break;
+                case '02':
+                    findCondition = { ...findCondition, 'price': { $gte: 2000000, $lte: 5000000 } }
+                    break;
+                case '03':
+                    findCondition = { ...findCondition, 'price': { $gte: 5000000, $lte: 10000000 } }
+                    break;
+                case '04':
+                    findCondition = { ...findCondition, 'price': { $gte: 10000000 } }
+                    break;
+                default:
+                    break;
+            }
             let docs, lastPage, productPerPage, skipPage;
             if (page) {
                 docs = await productModel.countDocuments(findCondition);
-                lastPage = Math.ceil(docs / 10);
-                productPerPage = 10;
+                lastPage = Math.ceil(docs / 12);
+                productPerPage = 12;
                 skipPage = (Number(page) - 1) * productPerPage;
             }
 
