@@ -127,3 +127,23 @@ exports.forgotPassword = async (req, res) => {
         })
     }
 }
+
+// @route PUT /auth/change-password
+exports.changePassword = async (req, res) => {
+    try {
+        const { oldPassword, newPassword } = req.body;
+        const userId = req.user?.id;
+        const authService = new AuthService();
+        const rsp = await authService.changePassword(userId, oldPassword, newPassword);
+        res.status(rsp.statusCode).json({
+            success: rsp.success,
+            msg: rsp.msg
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            msg: 'Internal server error'
+        })
+    }
+}

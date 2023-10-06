@@ -9,5 +9,6 @@ router.post('/check-account', authController.checkAccount);
 router.post('/login-admin', authController.loginAdmin);
 router.post('/login', authController.login);
 router.post('/forgot-password', authController.forgotPassword);
+router.put('/change-password', authController.changePassword);
 
 export default router
