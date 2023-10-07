@@ -43,6 +43,29 @@ exports.findAll = async (req, res) => {
     }
 }
 
+// @route GET /product/search
+// @query page, brand, styleCode, strapCode, glassCode, systemCode, gender, price, key
+exports.search = async (req, res) => {
+    try {
+        const { brand, strapCode, styleCode, systemCode, glassCode, price, gender, page, key } = req.query;
+
+        const productService = new ProductService();
+        const rsp = await productService.find({ brand, styleCode, strapCode, glassCode, systemCode, gender, price, searchKey: key }, page);
+        res.status(rsp.statusCode).json({
+            msg: rsp.msg,
+            success: rsp.success,
+            pagination: rsp.pagination,
+            products: rsp.products
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            msg: 'Internal server error'
+        })
+    }
+}
+
 // @route GET /product/hot
 exports.findHotProducts = async (req, res) => {
     try {

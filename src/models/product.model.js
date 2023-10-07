@@ -91,5 +91,5 @@ const productSchema = new Schema({
     }
 }, { timestamps: true });
 
-productSchema.index({ name: 'text', description: 'text', glass: 'text', strap: 'text', style: 'text' });
+productSchema.index({ name: 'text' });
 export default mongoose.model('product', productSchema);

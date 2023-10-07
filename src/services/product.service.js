@@ -53,8 +53,11 @@ class ProductService {
     async find(condition, page) {
         try {
             let findCondition = {};
+            if (condition.searchKey) {
+                findCondition = { $text: { $search: condition.searchKey } };
+            }
             if (condition.brand) {
-                findCondition = { brand: condition.brand };
+                findCondition = { ...findCondition, brand: condition.brand };
             }
             if (condition.styleCode) {
                 findCondition = { ...findCondition, 'style.code': condition.styleCode }
