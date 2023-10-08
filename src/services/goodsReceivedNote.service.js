@@ -38,6 +38,10 @@ class GoodsReceivedNoteService {
                     path: 'products',
                     populate: { path: 'supplier' }
                 })
+                .populate({
+                    path: 'products',
+                    populate: { path: 'product', select: ['_id', 'name'] }
+                })
                 .sort({ createdAt: -1 })
             return {
                 statusCode: 200,
