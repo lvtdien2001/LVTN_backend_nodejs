@@ -19,6 +19,27 @@ exports.findById = async (req, res) => {
     }
 }
 
+// @route GET /comment/by-user?productId
+exports.findByUser = async (req, res) => {
+    try {
+        const { productId, userId } = req.query;
+        const commentService = new CommentService();
+        const rsp = await commentService.findByUser(productId, userId);
+
+        res.status(rsp.statusCode).json({
+            success: rsp.success,
+            msg: rsp.msg,
+            comment: rsp.comment
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            msg: 'Internal server error'
+        })
+    }
+}
+
 // @route GET /comment?productId
 exports.findByProduct = async (req, res) => {
     try {
@@ -45,7 +66,7 @@ exports.create = async (req, res) => {
             userId: req.user?.id,
             productId: req.body.productId,
             content: req.body.content,
-            rate: req.body.rate
+            star: req.body.star
         }
         const commentService = new CommentService();
         const rsp = await commentService.create(payload);
@@ -70,7 +91,7 @@ exports.update = async (req, res) => {
             userId: req.user?.id,
             id: req.params.id,
             content: req.body.content,
-            rate: req.body.rate
+            star: req.body.star
         }
         const commentService = new CommentService();
         const rsp = await commentService.update(payload);

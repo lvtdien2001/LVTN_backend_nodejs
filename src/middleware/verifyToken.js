@@ -8,7 +8,7 @@ const verifyToken = (req, res, next) => {
     const token = authHeader && authHeader.split(' ')[1];
 
     // check public router
-    const routesReg = /\/brand|\/product/;
+    const routesReg = /\/brand|\/product|\/comment/;
     const isPublicRoutes =
         /\/auth\/login|\/auth\/register|\/auth\/check-account|\/auth\/forgot-password/.test(req.originalUrl) ||
         /\/otp/.test(req.originalUrl) ||

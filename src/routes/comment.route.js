@@ -3,7 +3,8 @@ import commentController from '../controllers/comment.controller';
 
 const router = express.Router();
 
-router.get('/by-product', commentController.findByProduct);
+router.get('/', commentController.findByProduct);
+router.get('/by-user', commentController.findByUser);
 router.get('/:id', commentController.findById);
 router.post('/', commentController.create);
 router.put('/:id', commentController.update);
