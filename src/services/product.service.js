@@ -102,6 +102,7 @@ class ProductService {
                 .find(findCondition)
                 .populate('brand', ['_id', 'name', 'logo'])
                 .skip(skipPage)
+                .sort({ updatedAt: -1 })
                 .limit(productPerPage)
             return {
                 statusCode: 200,

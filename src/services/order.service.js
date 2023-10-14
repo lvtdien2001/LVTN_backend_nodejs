@@ -34,15 +34,20 @@ class OrderService {
         }
     }
 
-    async findByUser(userId) {
+    async findByUser(userId, statusCode) {
         try {
+            let filter = {
+                user: userId
+            }
+            statusCode && (filter = { ...filter, 'status.code': statusCode });
             const orders = await orderModel
-                .find({ user: userId })
+                .find(filter)
                 .populate('user', ['_id', 'email', 'fullName', 'phoneNumber'])
                 .populate({
                     path: 'products',
                     populate: { path: 'product' }
                 })
+                .sort({ createdAt: -1 })
 
             return {
                 statusCode: 200,
@@ -132,10 +137,16 @@ class OrderService {
                 }
             }
             const updateCondition = { _id: id }
-            const updateData = {
+            let updateData = {
                 status: {
                     code: data.code,
                     name: data.name
+                }
+            };
+            if (data.code === '04') {
+                updateData = {
+                    ...updateData,
+                    isPayment: true
                 }
             }
             const updatedOrder = await orderModel.findOneAndUpdate(updateCondition, updateData, { new: true })
@@ -204,6 +215,39 @@ class OrderService {
                 success: true,
                 msg: 'Cập nhật địa chỉ đơn hàng thành công',
                 updatedOrder
+            }
+        } catch (error) {
+            console.log(error);
+            return {
+                statusCode: 500,
+                msg: 'Internal server error',
+                success: false
+            }
+        }
+    }
+
+    async cancelOrder(orderId, reason, userId) {
+        try {
+            const updateData = {
+                status: { code: '07', name: 'Đã hủy' },
+                cancelReason: reason
+            };
+            const updateCondition = {
+                user: userId, _id: orderId
+            }
+            const updatedOrder = await orderModel.findOneAndUpdate(updateCondition, updateData, { new: true });
+            if (!updatedOrder) {
+                return {
+                    statusCode: 404,
+                    success: false,
+                    msg: 'Order not found or user not authorised'
+                }
+            }
+            return {
+                statusCode: 200,
+                success: true,
+                msg: 'Hủy đơn hàng thành công',
+                canceledOrder: updatedOrder
             }
         } catch (error) {
             console.log(error);

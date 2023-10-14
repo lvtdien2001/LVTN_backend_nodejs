@@ -20,11 +20,12 @@ exports.findById = async (req, res) => {
     }
 }
 
-// @route GET /order/by-user
+// @route GET /order/by-user?statusCode
 exports.findByUser = async (req, res) => {
     try {
+        const { statusCode } = req.query;
         const orderService = new OrderService();
-        const rsp = await orderService.findByUser(req.user?.id);
+        const rsp = await orderService.findByUser(req.user?.id, statusCode);
         res.status(rsp.statusCode).json({
             success: rsp.success,
             msg: rsp.msg,
@@ -71,8 +72,8 @@ exports.create = async (req, res) => {
         const productService = new ProductService();
         const orderService = new OrderService();
         const rsp = await orderService.create(payload);
-        await productService.increaseSold(req.body.products);
-        await productService.reduceInventory(req.body.products);
+        // await productService.increaseSold(req.body.products);
+        // await productService.reduceInventory(req.body.products);
         res.status(rsp.statusCode).json({
             success: rsp.success,
             msg: rsp.msg,
@@ -91,7 +92,8 @@ exports.create = async (req, res) => {
 exports.updateStatus = async (req, res) => {
     try {
         const orderService = new OrderService();
-        const rsp = await orderService.updateStatus(req.params.id, req.body.status);
+        const rsp = await orderService.updateStatus(req.params.id, req.body.statusCode);
+        console.log(req.body.products);
         res.status(rsp.statusCode).json({
             success: rsp.success,
             msg: rsp.msg,
@@ -134,6 +136,29 @@ exports.updateAddress = async (req, res) => {
             success: rsp.success,
             msg: rsp.msg,
             updatedOrder: rsp.updatedOrder
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            msg: 'Internal server error'
+        })
+    }
+}
+
+// @route PUT /order/cancel/:id
+exports.cancel = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const userId = req.user?.id;
+        const { cancelReason } = req.body;
+
+        const orderService = new OrderService();
+        const rsp = await orderService.cancelOrder(orderId, cancelReason, userId);
+        res.status(rsp.statusCode).json({
+            success: rsp.success,
+            msg: rsp.msg,
+            canceledOrder: rsp.canceledOrder
         })
     } catch (error) {
         console.log(error);

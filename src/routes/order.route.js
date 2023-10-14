@@ -11,5 +11,6 @@ router.post('/', orderController.create);
 router.put('/status/:id', orderController.updateStatus);
 router.put('/cash/:id', orderController.updatePaymentStatus);
 router.put('/address/:id', orderController.updateAddress);
+router.put('/cancel/:id', orderController.cancel);
 
 export default router
