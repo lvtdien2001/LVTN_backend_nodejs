@@ -50,7 +50,7 @@ class ProductService {
         }
     }
 
-    async find(condition, page) {
+    async find(condition, page, sortName, sortType) {
         try {
             let findCondition = {};
             if (condition.searchKey) {
@@ -98,11 +98,16 @@ class ProductService {
                 skipPage = (Number(page) - 1) * productPerPage;
             }
 
+            let sort = { updatedAt: -1 };
+            if (sortName && sortType) {
+                sort = { [`${sortName}`]: sortType }
+            }
+
             const products = await productModel
                 .find(findCondition)
                 .populate('brand', ['_id', 'name', 'logo'])
                 .skip(skipPage)
-                .sort({ updatedAt: -1 })
+                .sort(sort)
                 .limit(productPerPage)
             return {
                 statusCode: 200,

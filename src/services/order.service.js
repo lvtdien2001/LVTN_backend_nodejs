@@ -64,15 +64,31 @@ class OrderService {
         }
     }
 
-    async findAll() {
+    async findAll(payload) {
+        let filter;
+        payload.statusCode && (filter = { 'status.code': payload.statusCode });
+        payload.isPayment && (filter = { ...filter, isPayment: payload.isPayment });
+        payload.month && (filter = {
+            ...filter,
+            createdAt: {
+                $gte: new Date(`${payload.year}-${payload.month}-01`),
+                $lt: new Date(`${payload.year}-${payload.month}-31`)
+            }
+        })
+
+        payload.year && (filter = {
+            ...filter,
+            updatedAt: {
+                $gte: new Date(`${payload.year}-01-01`),
+                $lt: new Date(`${payload.year}-12-31`)
+            }
+        })
+
         try {
             const orders = await orderModel
-                .find()
+                .find(filter)
                 .populate('user', ['_id', 'email', 'fullName', 'phoneNumber'])
-                .populate({
-                    path: 'products',
-                    populate: { path: 'product' }
-                })
+                .sort({ createdAt: -1 })
 
             return {
                 statusCode: 200,
@@ -226,17 +242,23 @@ class OrderService {
         }
     }
 
-    async cancelOrder(orderId, reason, userId) {
+    async cancelOrder(orderId, reason, userId, isAdmin) {
         try {
             const updateData = {
                 status: { code: '07', name: 'Đã hủy' },
                 cancelReason: reason
             };
-            const updateCondition = {
-                user: userId, _id: orderId
+            let updateCondition = {
+                _id: orderId
+            };
+            if (!isAdmin) {
+                updateCondition = {
+                    ...updateCondition,
+                    user: userId
+                }
             }
             const updatedOrder = await orderModel.findOneAndUpdate(updateCondition, updateData, { new: true });
-            if (!updatedOrder) {
+            if (!updatedOrder && !isAdmin) {
                 return {
                     statusCode: 404,
                     success: false,
