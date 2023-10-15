@@ -3,13 +3,19 @@ import UserService from '../services/user.service';
 // @route GET /user
 exports.findAll = async (req, res) => {
     try {
-        const userService = new UserService();
+        const { page } = req.query;
 
-        const rsp = await userService.findAll();
+        const payload = { page };
+
+        const userService = new UserService();
+        const rsp = await userService.findAll(payload);
+
         res.status(rsp.statusCode).json({
             success: rsp.success,
             msg: rsp.msg,
-            users: rsp.users
+            users: rsp.users,
+            usersLocked: rsp.usersLocked,
+            pagination: rsp.pagination
         })
     } catch (error) {
         console.log(error);

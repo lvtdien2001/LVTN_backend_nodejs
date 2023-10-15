@@ -2,13 +2,36 @@ import userModel from '../models/user.model';
 import cloudinary from '../utils/cloudinary';
 
 class UserService {
-    async findAll() {
+    async findAll(payload) {
         try {
-            const users = await userModel.find().select('-password');
+            let docs, lastPage, usersPerPage, skipPage;
+            if (payload.page) {
+                docs = await userModel.countDocuments({ isDisabled: false });
+                lastPage = Math.ceil(docs / 12);
+                usersPerPage = 12;
+                skipPage = (Number(payload.page) - 1) * usersPerPage;
+            }
+
+            const users = await userModel
+                .find({ isDisabled: false })
+                .select('-password')
+                .limit(usersPerPage)
+                .skip(skipPage)
+
+            const usersLocked = await userModel
+                .find({ isDisabled: true })
+                .select('-password')
             return {
                 statusCode: 200,
                 success: true,
-                users
+                users,
+                usersLocked,
+                pagination: {
+                    currentPage: payload.page,
+                    usersPerPage,
+                    lastPage,
+                    countUsers: docs
+                }
             }
         } catch (error) {
             console.log(error);
